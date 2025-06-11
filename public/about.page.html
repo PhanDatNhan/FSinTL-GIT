@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giới thiệu - Friendship in the Lord</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    ion-content {
+      flex: 1;
+    }
+
+    .navbar {
+      background-color: #2c3e50;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar-brand {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-brand:hover {
+      color: #d1e7ff;
+    }
+
+    .navbar .btn-primary {
+      margin: 0 8px;
+      border-radius: 25px;
+      padding: 8px 22px;
+      font-weight: 500;
+      background-color: #007bff;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .btn-primary:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .navbar .btn-primary.active {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .team-member .card-img-top {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .team-member .card {
+      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      opacity: 1;
+      animation: fadeInUp 0.6s ease-in-out forwards;
+    }
+
+    .team-member .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      opacity: 1;
+    }
+
+    .team-container:hover .team-member {
+      opacity: 0.5;
+    }
+
+    .team-container:hover .team-member:hover {
+      opacity: 1;
+    }
+
+    .team-member:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .team-member:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .team-member:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .team-member:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .team-member:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-body {
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .card-text {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .intro-card {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #343a40;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 4px;
+      background-color: #007bff;
+      border-radius: 2px;
+    }
+
+    .facebook-icon {
+      font-size: 1.2rem;
+      color: #4267B2;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .facebook-icon:hover {
+      color: #2a4373;
+    }
+
+    .footer {
+      background-color: #2c3e50;
+      color: #d1e7ff;
+      padding: 30px 0;
+      text-align: center;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .footer a {
+      color: #17a2b8;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: all 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .footer .social-icons i {
+      font-size: 1.5rem;
+    }
+
+    .footer .contact-info {
+      font-size: 0.9rem;
+      margin-top: 10px;
+      color: #b0c4de;
+    }
+
+    .container {
+      max-width: 1200px;
+    }
+
+    @media (max-width: 768px) {
+      .team-member .card-img-top {
+        max-height: 250px;
+      }
+
+      .row-cols-1>.col {
+        margin-bottom: 1.5rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.25rem;
+      }
+
+      .navbar .btn-primary {
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      .page-title {
+        font-size: 1.75rem;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+      }
+
+      .card-text {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .footer {
+        padding: 20px 0;
+      }
+
+      .footer .social-icons i {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand {
+        font-size: 1.1rem;
+      }
+
+      .footer .social-icons i {
+        font-size: 1rem;
+      }
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="home.page.html" onclick="loadPage('home.page.html')">FRIENDSHIP IN THE LORD</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="ms-auto">
+          <a href="home.page.html" class="btn btn-primary" aria-label="Home page"
+            onclick="loadPage('home.page.html')"><i class="bi bi-house me-1"></i> Trang chủ</a>
+          <a href="map.page.html" class="btn btn-primary" aria-label="Map page" onclick="loadPage('map.page.html')"><i
+              class="bi bi-geo-alt me-1"></i> Bản đồ</a>
+          <a href="about.page.html" class="btn btn-primary active" aria-label="About page"
+            onclick="loadPage('about.page.html')"><i class="bi bi-info-circle me-1"></i> Giới thiệu</a>
+          <a href="contact.page.html" class="btn btn-primary" aria-label="Contact page"
+            onclick="loadPage('contact.page.html')"><i class="bi bi-envelope me-1"></i> Liên hệ</a>
+          <a href="donate.page.html" class="btn btn-primary" aria-label="Donate page"
+            onclick="loadPage('donate.page.html')"><i class="bi bi-heart-fill me-1"></i> Quyên góp</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <ion-content class="ion-padding">
+    <div class="container mx-auto py-5">
+      <h2 class="page-title text-center">GIỚI THIỆU CÁC THÀNH VIÊN:</h2>
+      <div class="intro-card text-center mb-5">
+        <p>Chúng tôi là thành viên team chị Hờ, sinh viên lớp DH22HM, chuyên ngành Hệ thống Thông tin, khoa Môi Trường
+          và Tài Nguyên, trường Đại học Nông Lâm Thành Phố Hồ Chí Minh, cùng nhau xây dựng dự án "Friendship in the
+          Lord".</p>
+        <p class="text-muted">Dự án nhằm kết nối cộng đồng sinh viên công giáo và ngoại công giáo, thông qua công nghệ
+          GIS, mang lại giá trị bền vững và ý nghĩa, và kỷ niệm tình bạn của chúng tôi.</p>
+      </div>
+      <div class="row row-cols-1 row-cols-md-5 g-4 team-container">
+        <div class="col">
+          <div class="card team-member h-100">
+            <img src="assets/images/ChuongImg.jpg" class="card-img-top" alt="Lê Văn Chương" loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300?text=Thành viên'">
+            <div class="card-body">
+              <h5 class="card-title">Lê Văn Chương</h5>
+              <p class="card-text">MSSV: 22166006</p>
+              <p class="card-text">Nhiệm vụ: Thiết kế giao diện</p>
+              <a href="https://www.facebook.com/van.chuong.294307" target="_blank" class="facebook-icon"
+                aria-label="Trang Facebook của Lê Văn Chương"><i class="bi bi-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card team-member h-100">
+            <img src="assets/images/KhanhImg.jpg" class="card-img-top" alt="Ngô Ngọc Khánh" loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300?text=Thành viên'">
+            <div class="card-body">
+              <h5 class="card-title">Ngô Ngọc Khánh</h5>
+              <p class="card-text">MSSV: 22166032</p>
+              <p class="card-text">Nhiệm vụ: Phát triển bản đồ</p>
+              <a href="https://www.facebook.com/nola.tan2004/" target="_blank" class="facebook-icon"
+                aria-label="Trang Facebook của Ngô Ngọc Khánh"><i class="bi bi-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card team-member h-100">
+            <img src="assets/images/LyImg.jpg" class="card-img-top" alt="Nguyễn Thị Khánh Ly" loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300?text=Thành viên'">
+            <div class="card-body">
+              <h5 class="card-title">Nguyễn Thị Khánh Ly</h5>
+              <p class="card-text">MSSV: 22166049</p>
+              <p class="card-text">Nhiệm vụ: Biểu mẫu liên hệ</p>
+              <a href="https://www.facebook.com/thikhanhly.nguyen.14" target="_blank" class="facebook-icon"
+                aria-label="Trang Facebook của Nguyễn Thị Khánh Ly"><i class="bi bi-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card team-member h-100">
+            <img src="assets/images/NgocImg.jpg" class="card-img-top" alt="Du Thị Bích Ngọc" loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300?text=Thành viên'">
+            <div class="card-body">
+              <h5 class="card-title">Du Thị Bích Ngọc</h5>
+              <p class="card-text">MSSV: 22166058</p>
+              <p class="card-text">Nhiệm vụ: Tích hợp Firebase</p>
+              <a href="https://www.facebook.com/bich.ngoc.229886" target="_blank" class="facebook-icon"
+                aria-label="Trang Facebook của Du Thị Bích Ngọc"><i class="bi bi-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card team-member h-100">
+            <img src="assets/images/XuanImg.jpg" class="card-img-top" alt="Trần Sang Xuân" loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300?text=Thành viên'">
+            <div class="card-body">
+              <h5 class="card-title">Trần Sang Xuân</h5>
+              <p class="card-text">MSSV: 22166105</p>
+              <p class="card-text">Nhiệm vụ: Quản lý dữ liệu GeoJSON</p>
+              <a href="https://www.facebook.com/bang.ha.923171" target="_blank" class="facebook-icon"
+                aria-label="Trang Facebook của Trần Sang Xuân"><i class="bi bi-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-2">"Friendship in the Lord" - Team Chị Hờ - DH22HM</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/nola.tan2004/" aria-label="Trang Facebook của dự án"><i
+            class="bi bi-facebook"></i></a>
+        <a href="#" aria-label="Trang GitHub của dự án"><i class="bi bi-github"></i></a>
+      </div>
+      <div class="contact-info">
+        <p>Email: fl.tan.0369@gmail.com | Phone: +84 359204241</p>
+      </div>
+      <p class="mt-2 mb-0">© 2025 Friendship in the Lord. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+  <script>
+    function loadPage(page) {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+      setTimeout(() => {
+        window.location.href = page;
+      }, 1000);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quyên góp - Friendship in the Lord</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+      display: flex; /* Thêm để sử dụng flexbox */
+      flex-direction: column; /* Sắp xếp theo cột */
+      min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là toàn bộ viewport */
+    }
+    ion-content {
+      flex: 1; /* Nội dung chính mở rộng để đẩy footer xuống dưới */
+    }
+    .navbar {
+      background-color: #2c3e50;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+      transition: background-color 0.3s ease;
+    }
+    .navbar-brand {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .navbar-brand:hover {
+      color: #d1e7ff;
+    }
+    .navbar .btn-primary {
+      margin: 0 8px;
+      border-radius: 25px;
+      padding: 8px 22px;
+      font-weight: 500;
+      background-color: #007bff;
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .navbar .btn-primary:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+    .navbar .btn-primary.active {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 4px;
+      background-color: #007bff;
+      border-radius: 2px;
+    }
+    .donation-section .donation-title {
+      font-size: 1.8rem;
+      max-width: 100%;
+      white-space: normal;
+      word-wrap: break-word;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .footer {
+      background-color: #2c3e50;
+      color: #d1e7ff;
+      padding: 30px 0;
+      text-align: center;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      position: relative; /* Đảm bảo footer nằm đúng vị trí trong bố cục flex */
+    }
+    .footer a {
+      color: #17a2b8;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: all 0.3s ease;
+    }
+    .footer a:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .footer .social-icons i {
+      font-size: 1.5rem;
+    }
+    .footer .contact-info {
+      font-size: 0.9rem;
+      margin-top: 10px;
+      color: #b0c4de;
+    }
+    .container {
+      max-width: 1200px;
+      padding: 0 15px;
+      margin: 0 auto;
+    }
+    /* Donation Section */
+    .donation-section {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+      margin: 3rem 0;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .qr-wrapper {
+      position: relative;
+      margin-top: 2rem;
+      padding: 3rem 0;
+      min-height: 350px; /* Đảm bảo đủ không gian cho ảnh trang trí */
+    }
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .qr-card {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      width: 250px;
+      min-width: 200px;
+      max-width: 250px;
+      height: 300px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .qr-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2);
+    }
+    .qr-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 6px;
+      border: 1px solid #007bff;
+    }
+    .qr-card p {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    .decorative-img {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      object-fit: cover;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+    .decorative-img:hover {
+      transform: scale(1.1);
+    }
+    .img-top-left {
+      top: -20px;
+      left: 10%;
+    }
+    .img-top-right {
+      top: -20px;
+      right: 10%;
+    }
+    .img-bottom-left {
+      bottom: -20px;
+      left: 10%;
+    }
+    .img-bottom-right {
+      bottom: -20px;
+      right: 10%;
+    }
+    /* Group Photo */
+    .group-photo-container {
+      margin: 3rem 0;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .group-photo {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      object-position: bottom;
+      border-radius: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: block;
+      margin: 0 auto;
+    }
+    @media (max-width: 992px) {
+      .qr-card {
+        width: 220px;
+        height: 270px;
+      }
+      .qr-card img {
+        height: 170px;
+      }
+      .qr-card p {
+        font-size: 1.1rem;
+      }
+      .decorative-img {
+        width: 80px;
+        height: 80px;
+      }
+      .img-top-left, .img-bottom-left {
+        left: 5%;
+      }
+      .img-top-right, .img-bottom-right {
+        right: 5%;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.25rem;
+      }
+      .navbar .btn-primary {
+        margin: 5px 0;
+        width: 100%;
+      }
+      .page-title {
+        font-size: 1.75rem;
+      }
+      .donation-section .donation-title {
+        font-size: 1.5rem;
+      }
+      .qr-wrapper {
+        padding: 2rem 0;
+        min-height: 300px;
+      }
+      .qr-container {
+        gap: 1.5rem;
+      }
+      .qr-card {
+        width: 200px;
+        height: 250px;
+      }
+      .qr-card img {
+        height: 150px;
+      }
+      .qr-card p {
+        font-size: 1rem;
+      }
+      .decorative-img {
+        width: 80px;
+        height: 80px;
+      }
+      .img-top-left, .img-bottom-left {
+        left: 5%;
+      }
+      .img-top-right, .img-bottom-right {
+        right: 5%;
+      }
+      .donation-section {
+        padding: 1.5rem;
+        margin: 2rem 0;
+      }
+      .group-photo {
+        height: 200px;
+      }
+    }
+    @media (max-width: 576px) {
+      .donation-title {
+        font-size: 1.3rem;
+      }
+      .qr-wrapper {
+        padding: 1.5rem 0;
+        min-height: 250px;
+      }
+      .qr-container {
+        gap: 1rem;
+      }
+      .qr-card {
+        width: 180px;
+        height: 230px;
+      }
+      .qr-card img {
+        height: 130px;
+      }
+      .qr-card p {
+        font-size: 0.9rem;
+      }
+      .decorative-img {
+        width: 60px;
+        height: 60px;
+      }
+      .img-top-left, .img-bottom-left {
+        left: 2%;
+      }
+      .img-top-right, .img-bottom-right {
+        right: 2%;
+      }
+    }
+    @media (max-width: 400px) {
+      .qr-card {
+        width: 160px;
+        height: 210px;
+      }
+      .qr-card img {
+        height: 110px;
+      }
+      .qr-card p {
+        font-size: 0.85rem;
+      }
+      .decorative-img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="home.page.html" onclick="loadPage('home.page.html')">FRIENDSHIP IN THE LORD</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="ms-auto">
+          <a href="home.page.html" class="btn btn-primary" aria-label="Home page" onclick="loadPage('home.page.html')"><i class="bi bi-house me-1"></i> Trang chủ</a>
+          <a href="map.page.html" class="btn btn-primary" aria-label="Map page" onclick="loadPage('map.page.html')"><i class="bi bi-geo-alt me-1"></i> Bản đồ</a>
+          <a href="about.page.html" class="btn btn-primary" aria-label="About page" onclick="loadPage('about.page.html')"><i class="bi bi-info-circle me-1"></i> Giới thiệu</a>
+          <a href="contact.page.html" class="btn btn-primary" aria-label="Contact page" onclick="loadPage('contact.page.html')"><i class="bi bi-envelope me-1"></i> Liên hệ</a>
+          <a href="donate.page.html" class="btn btn-primary active" aria-label="Donate page" onclick="loadPage('donate.page.html')"><i class="bi bi-heart-fill me-1"></i> Quyên góp</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <ion-content class="ion-padding">
+    <div class="container mx-auto">
+      <h1 class="page-title">DONATE - QUYÊN GÓP</h1>
+
+      <!-- Donation Section -->
+      <div class="donation-section">
+        <h2 class="donation-title">QUỸ QUYÊN GÓP CHO CÁC SINH VIÊN NGHÈO VƯỢT KHÓ</h2>
+        <p class="mb-4" style="color: #555;">Hãy chung tay giúp đỡ các em học sinh có hoàn cảnh khó khăn, để các em có cơ hội đến trường và xây dựng tương lai tươi sáng.</p>
+        <div class="qr-wrapper">
+          <!-- Decorative Images -->
+          <img src="assets/images/ngheo1.jpg" class="decorative-img img-top-left" alt="Hình ảnh sinh viên nghèo 1">
+          <img src="assets/images/ngheo2.jpg" class="decorative-img img-top-right" alt="Hình ảnh sinh viên nghèo 2">
+          <img src="assets/images/ngheo3.jpg" class="decorative-img img-bottom-left" alt="Hình ảnh sinh viên nghèo 3">
+          <img src="assets/images/ngheo4.jpg" class="decorative-img img-bottom-right" alt="Hình ảnh sinh viên nghèo 4">
+          <!-- QR Codes -->
+          <div class="qr-container">
+            <div class="qr-card">
+              <img src="assets/qr/momo.jpg" alt="QR Momo" onerror="this.src='https://via.placeholder.com/150?text=QR+Momo'">
+              <p>Momo</p>
+            </div>
+            <div class="qr-card">
+              <img src="assets/qr/zalopay.jpg" alt="QR ZaloPay" onerror="this.src='https://via.placeholder.com/150?text=QR+ZaloPay'">
+              <p>ZaloPay</p>
+            </div>
+            <div class="qr-card">
+              <img src="assets/qr/bank.jpg" alt="QR Bank" onerror="this.src='https://via.placeholder.com/150?text=QR+Bank'">
+              <p>Bank</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group Photo -->
+      <div class="group-photo-container">
+        <h3 class="page-title" style="font-size: 1.8rem;">Lớp học của chúng tôi</h3>
+        <img src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/499771404_1462466201791502_1733590287265043531_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEEI7tt-5gW6hWx5s1oHRfLAs8eUs6DhC0Czx5SzoOELcc_nSvIivhZYisRH20wNInAklGNCV6WONFQcpcA8FkQ&_nc_ohc=ZS427d763-kQ7kNvwHPvxVM&_nc_oc=AdmgxZ3eYOiBjTvWJvxCZiB31N2qTnGqJVz1Rl0_CrT--NxdrJTGQ3kf9mZihZsY_Hd15Ltww2JcS_NYwAD1zfOY&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=cVPVK_De-6RTAXEpifD2YA&oh=00_AfIA46aaLEop_TbzX1-LZ3bubNYi6jfM0K6Dp-6Y6C5LXw&oe=6844F876" class="group-photo" alt="Ảnh lớp học">
+      </div>
+    </div>
+  </ion-content>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-2">"Friendship in the Lord" - Team Chị Hờ - DH22HM</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/nola.tan2004/" aria-label="Trang Facebook của dự án"><i class="bi bi-facebook"></i></a>
+        <a href="#" aria-label="Trang GitHub của dự án"><i class="bi bi-github"></i></a>
+      </div>
+      <div class="contact-info">
+        <p>Email: <a href="mailto:fl.tan.0369@gmail.com">fl.tan.0369@gmail.com</a> | Phone: <a href="tel:+84359204241">+84 359204241</a></p>
+      </div>
+      <p class="mt-2 mb-0">© 2025 Friendship in the Lord. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    function loadPage(page) {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+      setTimeout(() => {
+        window.location.href = page;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

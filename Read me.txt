@@ -1,0 +1,19 @@
+Hướng dẫn chi tiết cách chạy dự án Node.js
+
+Chuẩn bị trước dự án
+- Tải Node.js: https://nodejs.org/
+- Tải Visual Studio Code: https://code.visualstudio.com/download
+
+Cách chạy file (Lần đầu):
+B1: mở cmd folder chứa code (FSinTL)
+
+B2: Chạy lần lượt các mã sau 
+
+npm init -y
+npm install express
+npm install cors
+npm install mongodb
+npm install mongoose
+npm install dotenv
+npm start (Chạy từ lần thứ 2 thì chỉ cần lệnh này)
+

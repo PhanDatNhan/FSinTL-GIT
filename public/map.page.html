@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bản đồ - Friendship in the Lord</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Routing Machine CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+      position: relative;
+      padding-top: 70px;
+      /* Đảm bảo không chồng lấp với header */
+    }
+
+    .navbar {
+      background-color: #2c3e50;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .navbar:hover {
+      opacity: 1;
+    }
+
+    .navbar-brand {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-brand:hover {
+      color: #d1e7ff;
+    }
+
+    .navbar .btn-primary {
+      margin: 0 8px;
+      border-radius: 25px;
+      padding: 8px 22px;
+      font-weight: 500;
+      background-color: #007bff;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .btn-primary:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .navbar .btn-primary.active {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    #search-container {
+      position: absolute;
+      top: 150px;
+      left: 10px;
+      z-index: 1000;
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    #search-container.active {
+      display: block;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #dfe1e5;
+      border-radius: 4px;
+      box-shadow: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .search-input:focus {
+      border-color: #4d90fe;
+      box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+    }
+
+    #church-select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #dfe1e5;
+      border-radius: 4px;
+      box-shadow: none;
+      outline: none;
+    }
+
+    #church-select:focus {
+      border-color: #4d90fe;
+      box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+    }
+
+    #route-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #4285f4;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #route-btn:hover {
+      background-color: #357abd;
+    }
+
+    #search-toggle {
+      position: absolute;
+      top: 100px;
+      left: 10px;
+      z-index: 1000;
+      background: #4285f4;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #close-search {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #70757a;
+      cursor: pointer;
+    }
+
+    #info-panel {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: none;
+      z-index: 1000;
+    }
+
+    #route-info-container {
+      position: absolute;
+      top: 500px;
+      left: 10px;
+      z-index: 1000;
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 16px 16px 10px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      display: none;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    #route-info-container h5 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #4285f4;
+    }
+
+    #route-info-container p {
+      margin-bottom: 6px;
+      font-size: 1rem;
+      color: #222;
+    }
+
+    #route-info-container b {
+      color: #333;
+    }
+
+    #route-info-container #route-distance,
+    #route-info-container #route-time {
+      font-weight: 500;
+      color: #0056b3;
+    }
+
+    #route-info-container #close-route-info {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #70757a;
+      cursor: pointer;
+    }
+
+    #route-info-container #clear-route-btn {
+      margin-top: 10px;
+      width: 100%;
+      font-weight: 500;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      transition: background 0.2s;
+    }
+
+    #route-info-container #clear-route-btn:hover {
+      background: #b52a37;
+    }
+
+    .custom-zoom-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .custom-zoom-btn {
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    .custom-zoom-btn:hover {
+      background-color: #f0f0f0;
+    }
+
+    #my-location-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    #my-location-btn:hover {
+      background-color: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.25rem;
+      }
+
+      .navbar .btn-primary {
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      #search-container {
+        width: 90%;
+        left: 5%;
+        top: 80px;
+      }
+
+      #info-panel {
+        width: 90%;
+        left: 5%;
+      }
+
+      .custom-zoom-btn,
+      #my-location-btn {
+        width: 35px;
+        height: 35px;
+      }
+
+      #search-toggle {
+        top: 90px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="home.page.html" onclick="loadPage('home.page.html')">FRIENDSHIP IN THE LORD</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="ms-auto">
+          <a href="home.page.html" class="btn btn-primary" aria-label="Home page"
+            onclick="loadPage('home.page.html')"><i class="bi bi-house me-1"></i> Trang chủ</a>
+          <a href="map.page.html" class="btn btn-primary active" aria-label="Map page"
+            onclick="loadPage('map.page.html')"><i class="bi bi-geo-alt me-1"></i> Bản đồ</a>
+          <a href="about.page.html" class="btn btn-primary" aria-label="About page"
+            onclick="loadPage('about.page.html')"><i class="bi bi-info-circle me-1"></i> Giới thiệu</a>
+          <a href="contact.page.html" class="btn btn-primary" aria-label="Contact page"
+            onclick="loadPage('contact.page.html')"><i class="bi bi-envelope me-1"></i> Liên hệ</a>
+          <a href="donate.page.html" class="btn btn-primary" aria-label="Donate page"
+            onclick="loadPage('donate.page.html')"><i class="bi bi-heart-fill me-1"></i> Quyên góp</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Map Container -->
+  <div id="map"></div>
+
+  <!-- Search Container -->
+  <!-- ...existing code... -->
+  <div id="search-container">
+    <select id="church-start-select" class="form-select" style="margin-bottom:8px;">
+      <option value="" disabled selected>Chọn điểm xuất phát</option>
+      <option value="my-location">Vị trí của bạn</option>
+      <option value="thu-duc">Nhà thờ Thủ Đức</option>
+      <option value="binh-chieu">Nhà thờ Bình Chiểu</option>
+      <option value="binh-tho">Nhà thờ Bình Thọ</option>
+      <option value="chau-binh">Nhà thờ Châu Bình</option>
+      <option value="fatima-binh-trieu">Nhà thờ Fatima Bình Triệu</option>
+      <option value="hien-linh">Nhà thờ Hiển Linh (Dòng Tên)</option>
+      <option value="khiet-tam">Nhà thờ Khiết Tâm</option>
+      <option value="thanh-nguyen-duy-khang">Nhà thờ Thánh Nguyễn Duy Khang</option>
+      <option value="tam-ha">Nhà thờ Tam Hà</option>
+      <option value="tam-hai">Nhà thờ Tam Hải</option>
+      <option value="tu-duc">Nhà thờ Từ Đức</option>
+      <option value="xuan-hiep">Nhà thờ Xuân Hiệp</option>
+    </select>
+    <select id="church-end-select" class="form-select" style="margin-bottom:8px;">
+      <option value="" disabled selected>Chọn đích đến</option>
+      <option value="thu-duc">Nhà thờ Thủ Đức</option>
+      <option value="binh-chieu">Nhà thờ Bình Chiểu</option>
+      <option value="binh-tho">Nhà thờ Bình Thọ</option>
+      <option value="chau-binh">Nhà thờ Châu Bình</option>
+      <option value="fatima-binh-trieu">Nhà thờ Fatima Bình Triệu</option>
+      <option value="hien-linh">Nhà thờ Hiển Linh (Dòng Tên)</option>
+      <option value="khiet-tam">Nhà thờ Khiết Tâm</option>
+      <option value="thanh-nguyen-duy-khang">Nhà thờ Thánh Nguyễn Duy Khang</option>
+      <option value="tam-ha">Nhà thờ Tam Hà</option>
+      <option value="tam-hai">Nhà thờ Tam Hải</option>
+      <option value="tu-duc">Nhà thờ Từ Đức</option>
+      <option value="xuan-hiep">Nhà thờ Xuân Hiệp</option>
+    </select>
+    <button id="route-btn" class="btn">Tìm đường</button>
+  </div>
+  <!-- ...existing code... -->
+
+  <!-- Info Panel -->
+  <div id="info-panel" class="card">
+    <div class="card-body">
+      <h5 class="card-title" id="church-name"></h5>
+      <p class="card-text"><strong>Cha quản xứ:</strong> <span id="priest"></span></p>
+      <p class="card-text"><strong>Giờ lễ:</strong> <span id="mass-time"></span></p>
+      <p class="card-text"><strong>Địa chỉ:</strong> <span id="address"></span></p>
+      <img id="church-image" src="" alt="Hình ảnh nhà thờ" class="img-fluid mt-2" style="border-radius: 4px;">
+    </div>
+  </div>
+
+  <div id="route-info-container">
+    <button id="close-route-info"
+      style="position:absolute;top:5px;right:10px;background:none;border:none;font-size:1.5rem;color:#70757a;cursor:pointer;">&times;</button>
+    <h5>Thông tin tuyến đường</h5>
+    <p><b>Khoảng cách:</b> <span id="route-distance"></span> km</p>
+    <p><b>Thời gian (20km/h):</b> <span id="route-time"></span> phút</p>
+    <button class="btn btn-danger btn-sm" id="clear-route-btn">Xóa đường đi</button>
+  </div>
+
+  <!-- Search Toggle Button -->
+  <button id="search-toggle" class="btn"><i class="bi bi-search"></i></button>
+
+  <!-- My Location Button -->
+  <button id="my-location-btn" title="Vị trí của tôi">
+    <i class="bi bi-geo-alt-fill"></i>
+  </button>
+
+  <!-- Custom Zoom Controls -->
+  <div class="custom-zoom-controls">
+    <button class="custom-zoom-btn" id="zoom-in"><i class="bi bi-plus-lg"></i></button>
+    <button class="custom-zoom-btn" id="zoom-out"><i class="bi bi-dash-lg"></i></button>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([10.8607758, 106.7597], 13); // Center at Thủ Đức
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Remove default zoom control
+    map.zoomControl.remove();
+
+    // Church coordinates (approximate based on Thủ Đức area)
+    let churches = {};
+
+    fetch('assets/geo/NhaTho.geojson')
+      .then(response => response.json())
+      .then(data => {
+        data.features.forEach(feature => {
+          const key = feature.properties.id || feature.properties.slug || feature.properties.name.replace(/\s+/g, '-').toLowerCase();
+          churches[key] = {
+            lat: feature.geometry.coordinates[1],
+            lng: feature.geometry.coordinates[0],
+            name: feature.properties.name,
+            priest: feature.properties.priest || "",
+            mass: feature.properties.mass || "",
+            address: feature.properties.address || "",
+            image: feature.properties.image || "assets/images/default.jpg"
+          };
+          const marker = L.marker([churches[key].lat, churches[key].lng]).addTo(map)
+            .bindPopup(churches[key].name)
+            .on('click', () => showInfoPanel(key));
+        });
+      })
+
+    // My Location Button Functionality
+    let userMarker = null;
+    document.getElementById('my-location-btn').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const userLatLng = [position.coords.latitude, position.coords.longitude];
+          map.setView(userLatLng, 15); // Zoom to user's location
+          if (userMarker) {
+            map.removeLayer(userMarker);
+          }
+          userMarker = L.marker(userLatLng, {
+            icon: L.icon({
+              iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+              shadowSize: [41, 41]
+            })
+          }).addTo(map).bindPopup('Vị trí của bạn').openPopup();
+        }, () => {
+          alert('Không thể lấy vị trí của bạn. Vui lòng cấp quyền truy cập định vị.');
+        });
+      } else {
+        alert('Trình duyệt của bạn không hỗ trợ định vị.');
+      }
+    });
+
+    // Routing
+    let control;
+    document.getElementById('route-btn').addEventListener('click', () => {
+      const startLocation = document.getElementById('start-location').value || null;
+      const selectedChurch = document.getElementById('church-select').value;
+      if (control) map.removeControl(control);
+      if (selectedChurch) {
+        if (navigator.geolocation && !startLocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            const userLatLng = [position.coords.latitude, position.coords.longitude];
+            const churchLatLng = [churches[selectedChurch].lat, churches[selectedChurch].lng];
+            control = L.Routing.control({
+              waypoints: [L.latLng(userLatLng), L.latLng(churchLatLng)],
+              routeWhileDragging: true,
+              geocoder: L.Control.Geocoder.nominatim()
+            }).addTo(map);
+            document.getElementById('search-container').classList.remove('active');
+          }, () => alert('Không thể lấy vị trí của bạn. Vui lòng nhập thủ công.'));
+        } else if (startLocation) {
+          L.Control.Geocoder.nominatim().geocode(startLocation, results => {
+            if (results.length > 0) {
+              const startLatLng = [results[0].center.lat, results[0].center.lng];
+              const churchLatLng = [churches[selectedChurch].lat, churches[selectedChurch].lng];
+              control = L.Routing.control({
+                waypoints: [L.latLng(startLatLng), L.latLng(churchLatLng)],
+                routeWhileDragging: true,
+                geocoder: L.Control.Geocoder.nominatim()
+              }).addTo(map);
+              document.getElementById('search-container').classList.remove('active');
+            } else {
+              alert('Không tìm thấy vị trí bắt đầu.');
+            }
+          });
+        } else {
+          alert('Vui lòng nhập vị trí bắt đầu hoặc cho phép định vị.');
+        }
+      }
+    });
+
+    function showRouteInfo(km, time) {
+      document.getElementById('route-distance').textContent = km;
+      document.getElementById('route-time').textContent = time;
+      document.getElementById('route-info-container').style.display = 'block';
+    }
+
+    function clearRoute2Points() {
+      if (route2PointsControl) {
+        map.removeControl(route2PointsControl);
+        route2PointsControl = null;
+      }
+      document.getElementById('route-info-container').style.display = 'none';
+    }
+
+    // Tìm đường đi ngắn nhất giữa 2 nhà thờ
+    let route2PointsControl = null;
+    document.getElementById('route-btn').addEventListener('click', () => {
+      const startKey = document.getElementById('church-start-select').value;
+      const endKey = document.getElementById('church-end-select').value;
+      if (!startKey || !endKey) {
+        alert('Vui lòng chọn cả điểm xuất phát và điểm đích.');
+        return;
+      }
+      if (route2PointsControl) map.removeControl(route2PointsControl);
+
+      // Nếu chọn vị trí của bạn
+      if (startKey === 'my-location') {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            const startLatLng = [position.coords.latitude, position.coords.longitude];
+            const endLatLng = [churches[endKey].lat, churches[endKey].lng];
+            route2PointsControl = L.Routing.control({
+              waypoints: [L.latLng(startLatLng), L.latLng(endLatLng)],
+              routeWhileDragging: false,
+              show: false
+            }).addTo(map);
+
+            route2PointsControl.on('routesfound', function (e) {
+              let route = e.routes[0];
+              let meters = route.summary.totalDistance;
+              let km = (meters / 1000).toFixed(2);
+              let time = (meters / 1000 / 20 * 60).toFixed(1); // 20km/h
+              showRouteInfo(km, time);
+            });
+          }, () => {
+            alert('Không thể lấy vị trí của bạn. Vui lòng cấp quyền truy cập định vị.');
+          });
+        } else {
+          alert('Trình duyệt của bạn không hỗ trợ định vị.');
+        }
+        return;
+      }
+
+      // Nếu chọn nhà thờ làm điểm xuất phát
+      const startLatLng = [churches[startKey].lat, churches[startKey].lng];
+      const endLatLng = [churches[endKey].lat, churches[endKey].lng];
+
+      route2PointsControl = L.Routing.control({
+        waypoints: [L.latLng(startLatLng), L.latLng(endLatLng)],
+        routeWhileDragging: false,
+        show: false
+      }).addTo(map);
+
+      route2PointsControl.on('routesfound', function (e) {
+        let route = e.routes[0];
+        let meters = route.summary.totalDistance;
+        let km = (meters / 1000).toFixed(2);
+        let time = (meters / 1000 / 20 * 60).toFixed(1); // 20km/h
+        showRouteInfo(km, time);
+      });
+    });
+
+    // Đóng panel thông tin tuyến đường
+    document.getElementById('close-route-info').onclick = clearRoute2Points;
+    document.getElementById('clear-route-btn').onclick = clearRoute2Points;
+
+    // Info Panel
+    function showInfoPanel(churchKey) {
+      const church = churches[churchKey];
+      document.getElementById('church-name').textContent = church.name || churchKey.replace('-', ' ').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      document.getElementById('priest').textContent = church.priest;
+      document.getElementById('mass-time').textContent = church.mass;
+      document.getElementById('address').textContent = church.address;
+      document.getElementById('church-image').src = church.image;
+      document.getElementById('info-panel').style.display = 'block';
+    }
+
+    // Hide info panel when clicking outside
+    map.on('click', () => {
+      document.getElementById('info-panel').style.display = 'none';
+    });
+
+    // Toggle search container
+    document.getElementById('search-toggle').addEventListener('click', () => {
+      document.getElementById('search-container').classList.toggle('active');
+    });
+
+    // Close search container
+    document.getElementById('close-search').addEventListener('click', () => {
+      document.getElementById('search-container').classList.remove('active');
+    }); z
+
+    // Prevent search container from showing when clicking navbar
+    document.querySelector('.navbar').addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Custom zoom controls
+    document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
+    document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
+
+    // Page navigation
+    function loadPage(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+
+</html>

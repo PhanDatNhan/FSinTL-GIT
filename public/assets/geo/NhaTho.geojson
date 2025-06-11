@@ -1,0 +1,228 @@
+{
+    "type": "FeatureCollection",
+    "name": "NhaThoThuDuc",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "thu-duc",
+                "name": "Nhà thờ Giáo xứ Thủ Đức",
+                "priest": "Cha Gioan B. Bùi Bá Tam Quan",
+                "mass": "05:00 17:30",
+                "address": "51 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức",
+                "image": "assets/images/thu-duc.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7571857,
+                    10.8517279
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "binh-chieu",
+                "name": "Giáo Xứ Bình Chiểu",
+                "priest": "Cha Giuse Nguyễn Hoàng Thanh",
+                "mass": "05: 00 18: 00",
+                "address": "Đường Bình Chiểu, TP. Thủ Đức",
+                "image": "assets/images/binh-chieu.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.730553,
+                    10.8813698
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "binh-tho",
+                "name": "Nhà Thờ Bình Thọ",
+                "priest": "Cha Giuse Phạm Thanh Bình, SDB",
+                "mass": "05: 30 17: 30",
+                "address": "Đường Bình Thọ, TP. Thủ Đức",
+                "image": "assets/images/binh-tho.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7712721,
+                    10.8487541
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "chau-binh",
+                "name": "Nhà thờ Giáo xứ Châu Bình",
+                "priest": "Cha Phanxicô Xaviê Nguyễn Khánh Hà CRM",
+                "mass": "05:00 17:30",
+                "address": "Đường Châu Bình, TP. Thủ Đức",
+                "image": "assets/images/chau-binh.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7448535,
+                    10.863132
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "fatima-binh-trieu",
+                "name": "Nhà Thờ Giáo Xứ Fatima Bình Triệu",
+                "priest": "Cha Gioakim Trần Văn Hương",
+                "mass": "05: 00 17: 30",
+                "address": "58 Đường 5, Hiệp Bình Chánh, TP. Thủ Đức",
+                "image": "assets/images/fatima-binh-trieu.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7103529,
+                    10.8289855
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "hien-linh",
+                "name": "Nhà thờ Giáo Xứ Hiển Linh",
+                "priest": "Cha Giuse Lê Quang Chủng, SJ",
+                "mass": "05:30 18:00",
+                "address": "19 Đường 5, Linh Trung, TP. Thủ Đức",
+                "image": "assets/images/hien-linh.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7640528,
+                    10.8609867
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "khiet-tam",
+                "name": "Nhà Thờ Giáo Xứ Khiết Tâm",
+                "priest": "Cha Giuse Vũ Hoàng Anh SSS",
+                "mass": "05:00 18:00",
+                "address": "Đường Khiết Tâm, TP. Thủ Đức",
+                "image": "assets/images/khiet-tam.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7443123,
+                    10.8756183
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "thanh-nguyen-duy-khang",
+                "name": "Giáo Xứ Thánh Nguyễn Duy Khang",
+                "priest": "Cha  Đa Minh Lâm Quang Khánh",
+                "mass": "04:40 16:30 18:00",
+                "address": "Đường Nguyễn Duy Khang, TP. Thủ Đức",
+                "image": "assets/images/thanh-nguyen-duy-khang.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.74606,
+                    10.8576327
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "tam-ha",
+                "name": "Nhà Thờ Giáo Xứ Tam Hà",
+                "priest": "Cha Giuse Phạm Công Trường",
+                "mass": "16:00 18:00",
+                "address": "Đường Tam Hà, TP. Thủ Đức",
+                "image": "assets/images/tam-ha.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7471644,
+                    10.8619056
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "tam-hai",
+                "name": "Nhà Thờ Giáo Xứ Tam Hải",
+                "priest": "Cha Phêrô Phạm Quốc Hùng SDB",
+                "mass": "05: 00 18: 00",
+                "address": "Đường Tam Hải, TP. Thủ Đức",
+                "image": "assets/images/tam-hai.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7429283,
+                    10.8715706
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "tu-duc",
+                "name": "Nhà thờ Giáo xứ Từ Đức",
+                "priest": "Cha Giuse Nguyễn Minh Đức",
+                "mass": "04: 30 17: 30",
+                "address": "Đường Từ Đức, TP. Thủ Đức",
+                "image": "assets/images/tu-duc.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7641533,
+                    10.8475583
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "xuan-hiep",
+                "name": "Nhà Thờ Xuân Hiệp",
+                "priest": " Cha Giuse Nguyễn Trường Thạch SDB",
+                "mass": "05:00 18:00",
+                "address": "Đường Xuân Hiệp, TP. Thủ Đức",
+                "image": "assets/images/xuan-hiep.jpg"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    106.7658472,
+                    10.8802705
+                ]
+            }
+        }
+    ]
+}
